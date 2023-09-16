@@ -1,0 +1,25 @@
+{
+    root: true,
+    env: {
+        browser: true,
+        node: true
+    },
+    extends: ['plugin:vue/recommended'],
+    plugins: ['vue'],
+    rules: {
+        'comma-dangle': ['error', 'always-multiline'],
+        'object-curly-spacing': [2, 'never'],
+        quotes: ['error', 'single'],
+        'keyword-spacing': ['error'],
+        'space-before-function-paren': ['error', 'never'],
+        'space-before-blocks': ['error', 'always'],
+        'no-multiple-empty-lines': ['error', {
+            'max': 1,
+        }],
+        'no-trailing-spaces': ['error'],
+        'padding-line-between-statements': [
+            'error',
+            {blankLine: 'always', prev: '*', next: 'return'},
+        ],
+    }
+}
