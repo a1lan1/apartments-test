@@ -7,6 +7,6 @@
 ## Tech Specification
 - Laravel 10
 - Vue 3
-- Vuex 4
+- Pinia 2
 - Element-plus
 - Vite 4
