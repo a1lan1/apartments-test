@@ -14,7 +14,7 @@ class Apartment extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var array<string>
      */
     protected $fillable = [
         'name',
@@ -45,7 +45,7 @@ class Apartment extends Model
             return $q->where('price', '>=', $filter['price'][0])
                 ->where('price', '<=', $filter['price'][1]);
         })
-            ->when(isset($filter['name']), function ($q) use ($filter) {
+            ->when(isset($filter['name']) && strlen($filter['name']) > 2, function ($q) use ($filter) {
                 return $q->where('name', 'LIKE', "%{$filter['name']}%");
             })
             ->when(isset($filter['bedrooms']), function ($q) use ($filter) {
