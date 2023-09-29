@@ -41,13 +41,12 @@
         </el-table-column>
     </el-table>
 
-    <el-row>
+    <el-row v-if="pagination && pagination.total_pages > 1">
         <el-col
             :span="12"
             :offset="6"
         >
             <el-pagination
-                v-if="pagination"
                 background
                 layout="prev, pager, next"
                 :total="pagination.total"
@@ -57,34 +56,25 @@
     </el-row>
 </template>
 
-<script>
-import {mapGetters, mapActions} from 'vuex'
+<script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+import { onMounted, onUnmounted } from 'vue'
+import { useApartmentStore } from '@/stores/apartment'
 
-export default {
-    computed: {
-        ...mapGetters('apartment', ['loading', 'apartments', 'pagination']),
-    },
+const store = useApartmentStore()
+const { loading, apartments, pagination } = storeToRefs(store)
+const { fetchApartments, resetApartments } = store
 
-    mounted() {
-        this.fetchApartments()
-    },
+onMounted(() => fetchApartments())
+onUnmounted(() => resetApartments())
 
-    beforeDestroy() {
-        this.resetApartments()
-    },
+function currency(value) {
+    if (!value) return ''
 
-    methods: {
-        ...mapActions('apartment', ['fetchApartments', 'resetApartments']),
-
-        currency(value) {
-            if (!value) return ''
-
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-            }).format(value)
-        },
-    },
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    }).format(value)
 }
 </script>
 

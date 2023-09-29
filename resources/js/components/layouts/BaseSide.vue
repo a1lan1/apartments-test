@@ -27,7 +27,8 @@
                             v-model="filters.name"
                             placeholder="Search by name"
                             clearable
-                            @input="handleFilter"
+                            @clear="handleFilter"
+                            @input="debounceSearch"
                         />
                     </el-tooltip>
                 </el-menu-item>
@@ -119,45 +120,47 @@
     </el-aside>
 </template>
 
-<script>
+<script lang="ts" setup>
+import { ref, reactive, onMounted } from 'vue'
 import { Filter } from '@element-plus/icons-vue'
-import { mapActions } from 'vuex'
+import { useApartmentStore } from '@/stores/apartment'
 
-export default {
-    components: {
-        Filter
-    },
+const store = useApartmentStore()
+const { fetchApartments } = store
 
-    data: () => ({
-        filters: null,
-        defaultFilter: {
-            name: null,
-            price: [100000, 1000000],
-            bedrooms: null,
-            bathrooms: null,
-            storeys: null,
-            garages: null
-        }
-    }),
+const defaultFilter = {
+    name: '',
+    price: [100000, 1000000],
+    bedrooms: null,
+    bathrooms: null,
+    storeys: null,
+    garages: null,
+}
 
-    created() {
-        this.setFilterDefault()
-    },
+const filters = reactive({ ...defaultFilter })
 
-    methods: {
-        ...mapActions('apartment', ['fetchApartments', 'resetApartments']),
+let debounce = ref(null)
 
-        handleFilter() {
-            this.fetchApartments(this.filters)
-        },
-        setFilterDefault() {
-            this.filters = Object.assign({}, { ...this.defaultFilter })
-        },
-        resetFilter() {
-            this.setFilterDefault()
-            this.fetchApartments()
-        }
-    }
+onMounted(() => setFilterDefault())
+
+function handleFilter() {
+    fetchApartments(filters)
+}
+
+function debounceSearch() {
+    if (filters.name.length < 3) return
+
+    clearTimeout(debounce)
+    debounce = setTimeout(() => handleFilter(), 600)
+}
+
+function setFilterDefault() {
+    Object.assign(filters, { ...defaultFilter })
+}
+
+function resetFilter() {
+    setFilterDefault()
+    fetchApartments()
 }
 </script>
 
