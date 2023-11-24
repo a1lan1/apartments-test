@@ -16,8 +16,22 @@ export const useApartmentStore = defineStore('apartment', {
             this.loading = true
 
             await axios
-                .post('/api/v1/apartments', filter)
+                .post('/api/v1/apartments/list', filter)
                 .then(({ data }) => this.setApartmentsData(data))
+                .catch(({ response }) =>
+                    ElNotification({
+                        title: 'Error',
+                        message: response.data.message,
+                        type: 'error',
+                    })
+                )
+                .finally(() => (this.loading = false))
+        },
+        async storeApartments (data: Object) {
+            this.loading = true
+
+            await axios
+                .post('/api/v1/apartments/store', data)
                 .catch(({ response }) =>
                     ElNotification({
                         title: 'Error',

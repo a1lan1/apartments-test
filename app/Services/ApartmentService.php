@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Apartment;
+use App\DTOs\ApartmentDTO;
 use App\Contracts\ApartmentContract;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -18,5 +19,16 @@ class ApartmentService implements ApartmentContract
     {
         return Apartment::filter($filter)
             ->paginate(self::PER_PAGE);
+    }
+
+    /**
+     * @param ApartmentDTO $apartmentDTO
+     * @return Apartment
+     */
+    public function store(ApartmentDTO $apartmentDTO): Apartment
+    {
+        return Apartment::create(
+            $apartmentDTO->toArray()
+        );
     }
 }

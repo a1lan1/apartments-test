@@ -22,7 +22,6 @@ class Apartment extends Model
         'bedrooms',
         'bathrooms',
         'storeys',
-        'storeys',
         'garages',
         'description',
     ];

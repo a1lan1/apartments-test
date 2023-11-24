@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\ApartmentDTO;
 use Illuminate\Http\JsonResponse;
 use App\Contracts\ApartmentContract;
 use App\Http\Requests\ApartmentsListRequest;
 use App\Http\Resources\Apartment\ApartmentCollection;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ApartmentController extends Controller
 {
@@ -32,8 +34,21 @@ class ApartmentController extends Controller
                 'garages',
             ]));
 
-        return response()->json(
-            new ApartmentCollection($apartments)
-        );
+        return response()->json([
+            new ApartmentCollection($apartments),
+            ResponseAlias::HTTP_OK
+        ]);
+    }
+
+    /**
+     * @param ApartmentDTO $apartmentDTO
+     * @return JsonResponse
+     */
+    public function store(ApartmentDTO $apartmentDTO): JsonResponse
+    {
+        return response()->json([
+            $this->apartmentService->store($apartmentDTO),
+            ResponseAlias::HTTP_CREATED
+        ]);
     }
 }

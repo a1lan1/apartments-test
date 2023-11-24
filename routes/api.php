@@ -9,6 +9,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Apartments
-Route::group(['prefix' => 'v1', 'middleware' => 'guest'], function () {
-    Route::post('apartments', [ApartmentController::class, 'list']);
+Route::group(['prefix' => 'v1/apartments', 'middleware' => 'guest'], function () {
+    Route::post('list', [ApartmentController::class, 'list']);
+    Route::post('store', [ApartmentController::class, 'store']);
 });
