@@ -34,10 +34,10 @@ class ApartmentController extends Controller
                 'garages',
             ]));
 
-        return response()->json([
+        return response()->json(
             new ApartmentCollection($apartments),
             ResponseAlias::HTTP_OK
-        ]);
+        );
     }
 
     /**
@@ -46,9 +46,9 @@ class ApartmentController extends Controller
      */
     public function store(ApartmentDTO $apartmentDTO): JsonResponse
     {
-        return response()->json([
+        return response()->json(
             $this->apartmentService->store($apartmentDTO),
             ResponseAlias::HTTP_CREATED
-        ]);
+        );
     }
 }
